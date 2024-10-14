@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Checkov Scan
+        uses: ./.github/workflows/checkov-scan.yml  # Call the reusable workflow
