@@ -8,9 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
+    steps:   
       - name: Run Checkov Scan
         uses: checkov/./.github/workflows/checkov-scan.yml@main  # Call the reusable workflow
