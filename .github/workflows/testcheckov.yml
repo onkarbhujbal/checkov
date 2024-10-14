@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Git Secrets
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-secrets
+
       - name: Set up Git Secrets
         run: |
           git secrets --register-raw-hashes
