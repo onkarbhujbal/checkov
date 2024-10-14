@@ -6,8 +6,6 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    uses: checkov/./.github/workflows/checkov-scan.yml@main  # Reference the reusable workflow
 
-    steps:   
-      - name: Run Checkov Scan
-        uses: checkov/./.github/workflows/checkov-scan.yml@main  # Call the reusable workflow
+    
