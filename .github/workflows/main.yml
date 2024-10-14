@@ -13,4 +13,4 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Run Checkov Scan
-        uses: ./.github/workflows/checkov-scan.yml  # Call the reusable workflow
+        uses: ./.github/workflows/checkov-scan.yml@main  # Call the reusable workflow
