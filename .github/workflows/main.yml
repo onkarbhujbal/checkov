@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    permissions: read-all  # Set the required permissions for this reusable workflow
     uses: ./.github/workflows/checkov-scan.yml  # Reference the reusable workflow
 
     
