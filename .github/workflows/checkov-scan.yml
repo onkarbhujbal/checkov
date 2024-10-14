@@ -7,7 +7,7 @@ on:
 jobs:
   checkov-scan:
     permissions: read-all  # Set the required permissions for this reusable workflow
-    runs-on: ci-runner-dev-linux-sandbox
+    runs-on: ubuntu-latest
   
     steps:
       - name: Checkout code
