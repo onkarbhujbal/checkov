@@ -1,0 +1,33 @@
+name: Checkov Scan
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  checkov:
+    runs-on: ubuntu-latest  # Use GitHub-hosted runner
+    permissions:
+      contents: read          # Read access to repository contents
+
+    steps:
+      # Check out your repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Python (if Checkov is installed as a Python package)
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Specify the Python version
+
+      # Install Checkov
+      - name: Install Checkov
+        run: |
+          pip install checkov
+
+      # Run Checkov scan
+      - name: Run Checkov
+        run: |
+          checkov -d .  # Scans the current directory for IaC files
