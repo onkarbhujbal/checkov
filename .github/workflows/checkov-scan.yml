@@ -2,13 +2,13 @@ name: Checkov Scan
 
 on:
   workflow_call:
-    permissions:
-      read-all: true  # Set the required permissions for this reusable workflow
+    
 
 jobs:
   checkov-scan:
+    permissions: read-all  # Set the required permissions for this reusable workflow
     runs-on: ci-runner-dev-linux-sandbox
-
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
