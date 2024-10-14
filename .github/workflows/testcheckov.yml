@@ -51,11 +51,3 @@ jobs:
             exit 1
           fi
           echo "No issues found!"
-
-      - name: Upload Scan Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: security-scan-results
-          path: |
-            git-secrets-results.txt
-            checkov-results.json
