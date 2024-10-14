@@ -1,4 +1,4 @@
-name: Checkov Scan
+name: Security Scans
 
 # Controls when the workflow will run
 on:
@@ -6,29 +6,56 @@ on:
     branches: [ "main" ]
 
 jobs:
-  checkov:
-    runs-on: ubuntu-latest  # Use GitHub-hosted runner
-    permissions:
-      contents: read          # Changed from write-all to read
-      actions: read          # Read access to repository contents
+  security-scan:
+    runs-on: ubuntu-latest
 
     steps:
-      # Check out your repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Python (if Checkov is installed as a Python package)
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'  # Specify the Python version
+      - name: Set up Git Secrets
+        run: |
+          git secrets --register-raw-hashes
+          git secrets --install
 
-      # Install Checkov
+      - name: Run Git Secrets Scan
+        id: git-secrets
+        run: |
+          git secrets --scan > git-secrets-results.txt || true
+          cat git-secrets-results.txt
+          if grep -q 'found' git-secrets-results.txt; then
+            echo "Secrets detected!" >> $GITHUB_ENV
+          fi
+
       - name: Install Checkov
         run: |
           pip install checkov
 
-      # Run Checkov scan
-      - name: Run Checkov
+      - name: Run Checkov Scan
+        id: checkov
         run: |
-          checkov -d .  # Scans the current directory for IaC files
+          checkov --directory . --quiet --output json --skip-check ${{ inputs.skip_checks }} > checkov-results.json
+          cat checkov-results.json
+          if grep -q '"result": "FAIL"' checkov-results.json; then
+            echo "Critical security violations found!" >> $GITHUB_ENV
+          fi
+
+      - name: Report Results
+        run: |
+          if [ -n "$SECRETS_DETECTED" ]; then
+            echo "Secrets were detected. Failing the Action."
+            exit 1
+          fi
+          if grep -q '"result": "FAIL"' checkov-results.json; then
+            echo "Checkov found critical violations. Failing the Action."
+            exit 1
+          fi
+          echo "No issues found!"
+
+      - name: Upload Scan Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: security-scan-results
+          path: |
+            git-secrets-results.txt
+            checkov-results.json
