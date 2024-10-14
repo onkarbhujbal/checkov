@@ -6,6 +6,6 @@ on:
 
 jobs:
   build:
-    uses: checkov/./.github/workflows/checkov-scan.yml@main  # Reference the reusable workflow
+    uses: checkov/.github/workflows/checkov-scan.yml@main  # Reference the reusable workflow
 
     
