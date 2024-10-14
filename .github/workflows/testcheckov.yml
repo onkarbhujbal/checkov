@@ -9,7 +9,8 @@ jobs:
   checkov:
     runs-on: ubuntu-latest  # Use GitHub-hosted runner
     permissions:
-      contents: read          # Read access to repository contents
+      contents: read          # Changed from write-all to read
+      actions: read          # Read access to repository contents
 
     steps:
       # Check out your repository
